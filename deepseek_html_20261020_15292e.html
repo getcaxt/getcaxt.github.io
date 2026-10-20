@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0d0d0f">
+  <title>caxt</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========== AUTH SCREEN ========== -->
+  <div id="auth-screen" class="screen active">
+    <div class="auth-card">
+      <div class="brand">caxt</div>
+      <div class="auth-sub" id="auth-sub">Welcome back</div>
+
+      <div class="field">
+        <input type="email" id="auth-email" placeholder="Email" autocomplete="email">
+      </div>
+      <div class="field">
+        <input type="password" id="auth-password" placeholder="Password (min 6 chars)" autocomplete="current-password">
+      </div>
+      <div class="field" id="auth-confirm-field" style="display:none;">
+        <input type="password" id="auth-confirm" placeholder="Confirm password" autocomplete="new-password">
+      </div>
+
+      <div class="auth-error" id="auth-error"></div>
+      <button class="btn primary" id="auth-submit">Log in</button>
+      <button class="btn ghost" id="auth-forgot" style="display:none;">Forgot password?</button>
+      <div class="auth-switch">
+        <span id="auth-switch-text">No account?</span>
+        <button class="link" id="auth-switch-btn">Sign up</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== NAME SETUP ========== -->
+  <div id="name-screen" class="screen">
+    <div class="auth-card">
+      <div class="brand">caxt</div>
+      <div class="auth-sub">Pick a display name</div>
+      <div class="field">
+        <input type="text" id="name-input" placeholder="e.g. alex" maxlength="20" autocomplete="off">
+      </div>
+      <div class="auth-error" id="name-error"></div>
+      <button class="btn primary" id="name-submit">Continue</button>
+      <div class="auth-hint">This is how others find you. Can't be changed later.</div>
+    </div>
+  </div>
+
+  <!-- ========== MAIN APP ========== -->
+  <div id="main-screen" class="screen">
+    <header class="topbar">
+      <div class="topbar-title" id="topbar-title">caxt</div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="btn-new-chat" title="New chat">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+        </button>
+        <button class="icon-btn" id="btn-menu" title="Menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Inbox view -->
+    <main id="view-inbox" class="view active">
+      <div class="inbox-list" id="inbox-list">
+        <div class="empty-state">No conversations yet.<br>Tap + to start one.</div>
+      </div>
+    </main>
+
+    <!-- Conversation view -->
+    <main id="view-chat" class="view">
+      <div class="chat-header">
+        <button class="icon-btn back-btn" id="btn-back">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="chat-title" id="chat-title">Chat</div>
+        <button class="icon-btn" id="btn-chat-menu">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
+          </svg>
+        </button>
+      </div>
+      <div class="messages" id="messages"></div>
+      <form class="composer" id="composer">
+        <input type="text" id="msg-input" placeholder="Message…" autocomplete="off" maxlength="2000">
+        <button class="send-btn" type="submit" id="send-btn">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path d="M2 21l21-9L2 3v7l15 2-15 2z"/>
+          </svg>
+        </button>
+      </form>
+    </main>
+  </div>
+
+  <!-- ========== NEW CHAT SHEET ========== -->
+  <div class="sheet-backdrop" id="newchat-backdrop">
+    <div class="sheet" id="newchat-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">New chat</div>
+      <div class="sheet-tabs">
+        <button class="sheet-tab active" data-tab="dm">Direct message</button>
+        <button class="sheet-tab" data-tab="group">Group</button>
+      </div>
+
+      <div class="sheet-content" id="sheet-dm">
+        <input type="text" class="search-input" id="dm-search" placeholder="Search display name…" autocomplete="off">
+        <div id="dm-results" class="search-results"></div>
+      </div>
+
+      <div class="sheet-content" id="sheet-group" style="display:none;">
+        <input type="text" class="search-input" id="group-name" placeholder="Group name" maxlength="30" autocomplete="off">
+        <input type="text" class="search-input" id="group-search" placeholder="Add members by display name…" autocomplete="off">
+        <div id="group-results" class="search-results"></div>
+        <div id="group-selected" class="chips"></div>
+        <button class="btn primary" id="btn-create-group">Create group</button>
+        <div class="auth-error" id="group-error"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MENU SHEET ========== -->
+  <div class="sheet-backdrop" id="menu-backdrop">
+    <div class="sheet" id="menu-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">Menu</div>
+      <div class="menu-info" id="menu-info"></div>
+      <button class="menu-btn" id="menu-signout">Sign out</button>
+    </div>
+  </div>
+
+  <!-- ========== CHAT MENU SHEET ========== -->
+  <div class="sheet-backdrop" id="chatmenu-backdrop">
+    <div class="sheet" id="chatmenu-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title" id="chatmenu-title">Chat options</div>
+      <div id="chatmenu-content"></div>
+    </div>
+  </div>
+
+  <!-- ========== TOAST ========== -->
+  <div id="toast" class="toast"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
